@@ -11,6 +11,7 @@ spring:
   batch:
     job:
       names: ${job.name:NONE}
+      enabled: false # 꺼두면 spring.batch.job.names 로 넘긴 job을 실행하지 않음
     jdbc:
       initialize-schema: ALWAYS
   datasource:
