@@ -1,8 +1,6 @@
 package com.example.springbootbasic.job.domain.order;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,6 +8,8 @@ import java.util.Date;
 @Getter
 @ToString
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
