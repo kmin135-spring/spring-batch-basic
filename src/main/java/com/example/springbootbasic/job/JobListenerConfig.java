@@ -1,5 +1,6 @@
 package com.example.springbootbasic.job;
 
+import com.example.springbootbasic.job.listener.JobLoggerListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -17,45 +18,49 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /*
---spring.batch.job.names=helloWorldJob
+리스너 사용 예제
+--spring.batch.job.names=jobListenerJob
  */
 @Configuration
 @RequiredArgsConstructor
-public class HelloWorldJobConfig {
+public class JobListenerConfig {
 
     private JobBuilderFactory jbf;
     private StepBuilderFactory sbf;
 
     @Autowired
-    public HelloWorldJobConfig(JobBuilderFactory jbf, StepBuilderFactory sbf) {
+    public JobListenerConfig(JobBuilderFactory jbf, StepBuilderFactory sbf) {
         this.jbf = jbf;
         this.sbf = sbf;
     }
 
     @Bean
-    public Job helloWorldJob(Step helloWorldStep) {
-        return jbf.get("helloWorldJob")
+    public Job jobListenerJob(Step jobListenerStep) {
+        return jbf.get("jobListenerJob")
                 .incrementer(new RunIdIncrementer())
-                .start(helloWorldStep)
+                .listener(new JobLoggerListener())
+                .start(jobListenerStep)
                 .build();
     }
 
     @JobScope
     @Bean
-    public Step helloWorldStep(Tasklet helloWorldTasklet) {
-        return sbf.get("helloWorldStep")
-                .tasklet(helloWorldTasklet)
+    public Step jobListenerStep(Tasklet jobListenerTasklet) {
+        return sbf.get("jobListenerStep")
+                .tasklet(jobListenerTasklet)
                 .build();
     }
 
     @StepScope
     @Bean
-    public Tasklet helloWorldTasklet() {
+    public Tasklet jobListenerTasklet() {
         return new Tasklet() {
             @Override
             public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-                System.out.println("Hello world Spring Batch");
-                return RepeatStatus.FINISHED;
+//                System.out.println("jobListener tasklet");
+//                return RepeatStatus.FINISHED;
+
+                throw new IllegalStateException("일부러 실패!");
             }
         };
     }
